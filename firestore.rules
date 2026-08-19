@@ -59,7 +59,7 @@ service cloud.firestore {
       allow update: if isOwner(userId)
                     && isValidId(userId)
                     && isValidUser(incoming(), userId)
-                    && incoming().diff(existing()).affectedKeys().hasOnly(['name', 'measurements', 'heightCm', 'weightKg', 'fitPreference', 'notes', 'updatedAt']);
+                    && incoming().diff(existing()).affectedKeys().hasOnly(['id', 'name', 'measurements', 'heightCm', 'weightKg', 'fitPreference', 'notes', 'updatedAt']);
       allow delete: if isOwner(userId);
     }
   }
