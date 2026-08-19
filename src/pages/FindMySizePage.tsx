@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Ruler, ChevronDown, ChevronUp, Sparkles, AlertCircle } from 'lucide-react';
+import { Ruler, ChevronDown, ChevronUp, Sparkles, CircleAlert as AlertCircle } from 'lucide-react';
 import type { Product, SizingProfile } from '@/types';
 import { matchProduct, VERDICT_LABELS } from '@/lib/matchEngine';
 import { CATEGORY_LABELS } from '@/lib/catalog';

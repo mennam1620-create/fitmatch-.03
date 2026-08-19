@@ -4,7 +4,7 @@ import { useProducts } from '@/hooks/useProducts';
 import { PRODUCTS as STATIC_PRODUCTS } from '@/lib/catalog';
 import { PageHeader } from '@/components/PageHeader';
 import { Button } from '@/components/ui/Button';
-import { ShieldAlert, RefreshCw, Plus, Trash2, Edit, Check } from 'lucide-react';
+import { ShieldAlert, RefreshCw, Plus, Trash2, CreditCard as Edit, Check } from 'lucide-react';
 import { Spinner } from '@/components/ui/Spinner';
 
 export function AdminDashboard({ onNavigate }: { onNavigate: (to: string) => void }) {

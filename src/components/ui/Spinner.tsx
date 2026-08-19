@@ -1,12 +1,15 @@
-import { Loader2 } from 'lucide-react';
+import { Loader as Loader2 } from 'lucide-react';
 
 interface SpinnerProps {
-  size?: number;
+  size?: number | 'sm' | 'md' | 'lg';
   className?: string;
 }
 
+const SIZE_MAP: Record<string, number> = { sm: 14, md: 20, lg: 28 };
+
 export function Spinner({ size = 20, className = '' }: SpinnerProps) {
-  return <Loader2 size={size} className={`animate-spin text-neutral-400 ${className}`} />;
+  const px = typeof size === 'number' ? size : SIZE_MAP[size] ?? 20;
+  return <Loader2 size={px} className={`animate-spin text-neutral-400 ${className}`} />;
 }
 
 export function Skeleton({ className = '' }: { className?: string }) {

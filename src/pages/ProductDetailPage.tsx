@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Check, AlertTriangle, X, ArrowLeft, AlertCircle, Info, Shirt, Waves } from 'lucide-react';
+import { Check, TriangleAlert as AlertTriangle, X, ArrowLeft, CircleAlert as AlertCircle, Info, Shirt, Waves } from 'lucide-react';
 import type { Product, SizeMatchResult, SizingProfile } from '@/types';
 import { SIZE_KEYS, MEASUREMENT_INFOS } from '@/types';
 import { matchProduct } from '@/lib/matchEngine';
