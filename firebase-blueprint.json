@@ -1,0 +1,56 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "Stores the user's sizing profile data",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Matches the user's authentication UID",
+          "maxLength": 128
+        },
+        "name": {
+          "type": "string",
+          "description": "The user's display name",
+          "maxLength": 128
+        },
+        "measurements": {
+          "type": "object",
+          "description": "User's body measurements",
+          "properties": {
+            "bust": { "type": "number" },
+            "waist": { "type": "number" },
+            "hips": { "type": "number" },
+            "inseam": { "type": "number" }
+          }
+        },
+        "heightCm": {
+          "type": "number"
+        },
+        "weightKg": {
+          "type": "number"
+        },
+        "fitPreference": {
+          "type": "string",
+          "enum": ["snug", "true-to-size", "relaxed"]
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Server timestamp of the last update"
+        }
+      },
+      "required": ["id"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "#/entities/User",
+      "description": "User profile containing their sizing information"
+    }
+  }
+}

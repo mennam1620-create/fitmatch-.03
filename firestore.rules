@@ -1,0 +1,66 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helpers
+    function isSignedIn() { return request.auth != null; }
+    function isOwner(userId) { return isSignedIn() && request.auth.uid == userId; }
+    function isAdmin() { return isSignedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid)); }
+    function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+    
+    function isValidUser(data, userId) {
+      return data.keys().hasAll(['id'])
+        && data.id == userId
+        && (!('name' in data) || (data.name is string && data.name.size() <= 128))
+        && (!('measurements' in data) || data.measurements is map)
+        && (!('heightCm' in data) || data.heightCm is number)
+        && (!('weightKg' in data) || data.weightKg is number)
+        && (!('fitPreference' in data) || (data.fitPreference is string && data.fitPreference in ['snug', 'true-to-size', 'relaxed']))
+        && (!('notes' in data) || (data.notes is string && data.notes.size() <= 1000))
+        && (!('updatedAt' in data) || data.updatedAt == request.time);
+    }
+    
+    match /{document=**} { 
+      allow read, write: if false; 
+    }
+    
+    match /admins/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      allow write: if false; // Only manage manually or via admin SDK
+    }
+
+    match /admin_requests/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      allow create: if isOwner(userId) && incoming().userId == userId;
+      allow update, delete: if isAdmin();
+    }
+    
+    match /products/{productId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    
+    match /brands/{brandId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    
+    match /categories/{categoryId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    
+    match /users/{userId} {
+      allow read: if isOwner(userId);
+      allow create: if isOwner(userId)
+                    && isValidId(userId)
+                    && isValidUser(incoming(), userId);
+      allow update: if isOwner(userId)
+                    && isValidId(userId)
+                    && isValidUser(incoming(), userId)
+                    && incoming().diff(existing()).affectedKeys().hasOnly(['name', 'measurements', 'heightCm', 'weightKg', 'fitPreference', 'notes', 'updatedAt']);
+      allow delete: if isOwner(userId);
+    }
+  }
+}
